@@ -1,0 +1,64 @@
+<html lang="en">
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<body>
+  
+  <div class="container">
+    <h2 class="h2 p-4">
+      All Events
+      <a class="h3 p-2 m-1 border border-success float-right rounded" href="/create" > + Create New Event</a>
+      <a class="h3 p-2 m-1 border border-danger float-right rounded" href="/logout">Logout</a>
+      
+    </h2>     
+
+    <div class="list-group"></div>
+    <% if (meets.length > 0) { %>
+      <% meets.forEach(meet => { %>
+        <% if(meet.objid == user.email) { %>
+          <li class="m-1 list-group-item">
+            <h3 class="h3"><%= meet.title %></h3>
+            <p class=""><%= meet.description %></p>
+            Event Start: <p ><%= meet.start %></p>
+            Event End: <p><%= meet.end %></p>
+            <a class="btn btn-success" href="/<%= meet._id %>">
+              Edit
+            </a>
+            <a class="delete btn btn-danger" data-doc="<%= meet._id %>">
+              Delete
+            </a>
+          </li>
+            
+        <% } %>
+      <% }) %>
+    <% } else { %>
+      <p>There are no events to display...</p>
+    <% } %>
+    
+  </div>
+
+  <script>
+    const trashcan = document.querySelector('a.delete');
+
+    trashcan.addEventListener('click', (e) => {
+      const endpoint = `/${trashcan.dataset.doc}`;
+
+      fetch(endpoint, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+    
+  </script>
+
+</body>
+</html>
